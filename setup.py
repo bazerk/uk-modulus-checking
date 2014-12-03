@@ -4,6 +4,10 @@ setup(
     name='ukmodulus',
     packages=['ukmodulus'],
     version='0.1',
+    package_data={
+        # If any package contains *.txt or *.rst files, include them:
+        '': ['*.txt', '*.rst'],
+    },
     description='Implementation of VocaLinks UK Modulus checking for UK account numbers and sort codes',
     author='Andrew Barrett',
     author_email='bazerk+pypy@gmail.com',
