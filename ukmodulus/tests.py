@@ -50,6 +50,7 @@ class RunAlgorithmChecks(unittest.TestCase):
             (ModulusWeight('', '', 'DBLAL', [2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1, 2, 1], '1'), '499273', '12345671',
              True),
         ]
+
         for case in cases:
             self.assertEqual(_run_check(case[1], case[2], case[0]), case[3])
 
@@ -69,14 +70,6 @@ class RunAlgorithmChecks(unittest.TestCase):
              True),
             (ModulusWeight('', '', 'MOD11', [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1], '4'), '000000', '00000011',
              False),
-        ]
-        for case in cases:
-            self.assertEqual(_run_check(case[1], case[2], case[0]), case[3])
-
-    def test_exception_5(self):
-        cases = [
-            (ModulusWeight('', '', 'MOD11', [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1], '4'), '938173', '00000009',
-             True),
         ]
         for case in cases:
             self.assertEqual(_run_check(case[1], case[2], case[0]), case[3])
@@ -125,8 +118,104 @@ class ValacdosTests(unittest.TestCase):
     def test_case_no1(self):
         self.assertEqual(validate_number('089999', '66374958'), True)
 
-        # def test_case_no23(self):
-        # self.assertEqual(validate_number('938063', '15764273'), False)
+    def test_case_no2(self):
+        self.assertEqual(validate_number('107999', '88837491'), True)
+
+    def test_case_no3(self):
+        self.assertEqual(validate_number('202959', '63748472'), True)
+
+    def test_case_no4(self):
+        self.assertEqual(validate_number('871427', '46238510'), True)
+
+    def test_case_no5(self):
+        self.assertEqual(validate_number('872427', '46238510'), True)
+
+    def test_case_no6(self):
+        self.assertEqual(validate_number('871427', '09123496'), True)
+
+    def test_case_no7(self):
+        self.assertEqual(validate_number('871427', '99123496'), True)
+
+    def test_case_no8(self):
+        self.assertEqual(validate_number('820000', '73688637'), True)
+
+    def test_case_no9(self):
+        self.assertEqual(validate_number('827999', '73988638'), True)
+
+    def test_case_no10(self):
+        self.assertEqual(validate_number('827101', '28748352'), True)
+
+    def test_case_no11(self):
+        self.assertEqual(validate_number('134020', '63849203'), True)
+
+    def test_case_no12(self):
+        self.assertEqual(validate_number('118765', '64371389'), True)
+
+    def test_case_no13(self):
+        self.assertEqual(validate_number('200915', '41011166'), True)
+
+    def test_case_no14(self):
+        self.assertEqual(validate_number('938611', '07806039'), True)
+
+    def test_case_no15(self):
+        self.assertEqual(validate_number('938600', '42368003'), True)
+
+    def test_case_no16(self):
+        self.assertEqual(validate_number('938063', '55065200'), True)
+
+    def test_case_no17(self):
+        self.assertEqual(validate_number('772798', '99345694'), True)
+
+    def test_case_no18(self):
+        self.assertEqual(validate_number('086090', '06774744'), True)
+
+    def test_case_no19(self):
+        self.assertEqual(validate_number('309070', '02355688'), True)
+
+    def test_case_no20(self):
+        self.assertEqual(validate_number('309070', '12345668'), True)
+
+    def test_case_no21(self):
+        self.assertEqual(validate_number('309070', '12345677'), True)
+
+    def test_case_no22(self):
+        self.assertEqual(validate_number('309070', '99345694'), True)
+
+    def test_case_no23(self):
+        self.assertEqual(validate_number('938063', '15764273'), False)
+
+    def test_case_no24(self):
+        self.assertEqual(validate_number('938063', '15764264'), False)
+
+    def test_case_no25(self):
+        self.assertEqual(validate_number('938063', '15763217'), False)
+
+    def test_case_no26(self):
+        self.assertEqual(validate_number('118765', '64371388'), False)
+
+    def test_case_no27(self):
+        self.assertEqual(validate_number('203099', '66831036'), False)
+
+    def test_case_no28(self):
+        self.assertEqual(validate_number('203099', '58716970'), False)
+
+    def test_case_no29(self):
+        self.assertEqual(validate_number('089999', '66374959'), False)
+
+    def test_case_no30(self):
+        self.assertEqual(validate_number('107999', '88837493'), False)
+
+    def test_case_no31(self):
+        self.assertEqual(validate_number('074456', '12345112'), True)
+
+    def test_case_no32(self):
+        self.assertEqual(validate_number('070116', '34012583'), True)
+
+    def test_case_no33(self):
+        self.assertEqual(validate_number('074456', '11104102'), True)
+
+    def test_case_no34(self):
+        self.assertEqual(validate_number('180002', '00000190'), True)
 
 
 if __name__ == '__main__':

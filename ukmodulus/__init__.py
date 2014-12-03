@@ -1,5 +1,9 @@
 # -*- coding: utf-8 -*-
 """
+Runs the checks detailed in VocaLinks Document vocalink_-_validating_account_numbers_v3.10.pdf
+Available at http://www.vocalink.com/products/payments/customer-support-services/modulus-checking.aspx
+
+TODO Currently doesn't deal with account numbers which are not 8 digits long.
 """
 
 __title__ = 'ukmodulus'
@@ -69,7 +73,7 @@ def _get_weightings(sort_code):
 
 
 def _combine_sort_and_account(sort_code, account_number, weighting):
-    if weighting.exception_code == '5' and weighting.algorithm != 'DBLAL' and sort_code in _sc_subs:
+    if weighting.exception_code == '5' and sort_code in _sc_subs:
         sort_code = _sc_subs[sort_code]
     elif weighting.exception_code == '8':
         sort_code = '090126'
@@ -112,18 +116,18 @@ def _get_weighting_to_use(weighting, combined):
 
 def _exception_5_remainder_check(algorithm, combined, remainder):
     if algorithm == DBLAL:
-        if remainder == 0 and combined[POSITION_H] == 0:
+        if remainder == 0 and combined[POSITION_H] == '0':
             return True
         else:
             check = 10 - remainder
-            return check == combined[POSITION_H]
+            return check == int(combined[POSITION_H])
     else:
         if remainder == 1:
             return False
-        if remainder == 0 and combined[POSITION_G] == 0:
+        if remainder == 0 and combined[POSITION_G] == '0':
             return True
         check = 11 - remainder
-        return check == combined[POSITION_G]
+        return check == int(combined[POSITION_G])
 
 
 def _run_check(sort_code, account_number, weighting):
@@ -158,23 +162,23 @@ def validate_number(sort_code, account_number):
     sort_code = _clean_input(sort_code, required_length=6)
     account_number = _clean_input(account_number, required_length=8)
     weightings = _get_weightings(sort_code)
-    check_count = len(_weightings)
+    check_count = len(weightings)
     if not weightings:
         return True
-    first_check = _weightings[0]
+    first_check = weightings[0]
     if _run_check(sort_code, account_number, first_check):
         if check_count == 1 or first_check.exception_code in ('2', '9', '10', '11', '12', '13', '14'):
             return True
-        return _run_check(sort_code, account_number, _weightings[1])
+        return _run_check(sort_code, account_number, weightings[1])
     else:
         if first_check.exception_code == '14':
             if account_number[7] not in '019':
                 return False
             account_number = ('0' + account_number)[:8]
-            return _run_check(sort_code, account_number, _weightings[0])
-        if check_count == 1:
+            return _run_check(sort_code, account_number, weightings[0])
+        if check_count == 1 or first_check.exception_code not in ('2', '9', '10', '11', '12', '13', '14'):
             return False
-        return _run_check(sort_code, account_number, _weightings[1])
+        return _run_check(sort_code, account_number, weightings[1])
 
 
 def _load_weightings():
