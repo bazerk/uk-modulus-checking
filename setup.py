@@ -3,7 +3,7 @@ from distutils.core import setup
 setup(
     name='ukmodulus',
     packages=['ukmodulus'],
-    version='0.1',
+    version='0.1.1',
     package_data={
         # If any package contains *.txt or *.rst files, include them:
         '': ['*.txt', '*.rst'],

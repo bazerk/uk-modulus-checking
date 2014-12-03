@@ -2,4 +2,6 @@
 setup.cfg
 setup.py
 ukmodulus/__init__.py
+ukmodulus/scsubtab.txt
 ukmodulus/tests.py
+ukmodulus/valacdos.txt
