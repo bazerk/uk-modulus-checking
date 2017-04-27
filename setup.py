@@ -15,4 +15,5 @@ setup(
     download_url='https://github.com/bazerk/uk-modulus-checking/tarball/0.1',
     keywords=['uk', 'banking', 'validation'],
     classifiers=[],
+    licence='MIT',
 )
