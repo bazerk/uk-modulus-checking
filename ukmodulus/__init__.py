@@ -51,14 +51,60 @@ _mod_values = {
     MOD11: 11,
 }
 
+COOPERATIVE_BANK_SORT_PREFIX = '08'
 
-def _clean_input(number, required_length=None):
-    number = re.sub('[-\s]', '', number)
-    if re.match('^\d+$', number) is None:
-        raise ValueError
-    if required_length is not None and len(number) != required_length:
-        raise ValueError
+
+def _clean_input(number, allowed_lengths=None):
+    """Clean number of dashes and whitespaces. Optionaly make sure it has certain length.
+    
+    :param number: String representation of a number
+    :type number: basestring
+    :param allowed_lengths: List of allowed lengths for the 
+    :type allowed_lengths: list[int]
+    :return: 
+    """
+    number = re.sub(r'[-\s]', '', number)
+
+    if not number.isdigit():
+        raise ValueError('Number {} should contain only digits'.format(number))
+    if allowed_lengths is not None and len(number) not in allowed_lengths:
+        raise ValueError('Invalid length of {}. Should be in {}'.format(len(number),
+                                                                        allowed_lengths))
     return number
+
+
+def _normalize_account_number_and_code(account_number, sort_code):
+    """Normalize account number length. Return new account number and sort_code
+    
+    Ten digit account numbers:
+        * National Westminster Bank plc
+            Use the last eight digits only. If there is a hyphen in 
+            the account number between the second and
+            third numbers this should be ignored.
+        * Co-Operative Bank plc 
+            Use the first eight digits only
+
+    Nine digit account numbers
+        * Santander 
+            Replace the last digit of the sorting code with the
+            first digit of the account number, then use
+            the last eight digits of the account number only.
+
+    Seven digit account numbers
+        * General Prefix the account number with a zero (0)
+
+    Six digit account numbers
+        * General Prefix the account number with two zeros (00)*
+    """
+    ln = len(account_number)
+    if ln == 10:
+        if sort_code.startswith(COOPERATIVE_BANK_SORT_PREFIX):
+            return account_number[:8], sort_code
+        return account_number[-8:], sort_code
+    elif ln == 9:
+        return account_number[-8:], sort_code[:-1] + account_number[0]
+    else:
+        return '{:08}'.format(int(account_number)), sort_code
 
 
 def _get_weightings(sort_code):
@@ -156,11 +202,11 @@ def _run_check(sort_code, account_number, weighting):
 
 
 def validate_number(sort_code, account_number):
-    """
-    TODO Deal with non-standard account numbers as listed by section 4.2 in the VocaLink spec
-    """
-    sort_code = _clean_input(sort_code, required_length=6)
-    account_number = _clean_input(account_number, required_length=8)
+    """Validate account number with sort code"""
+    sort_code = _clean_input(sort_code, allowed_lengths=[6])
+    account_number = _clean_input(account_number, allowed_lengths=range(6, 11))
+    account_number, sort_code = _normalize_account_number_and_code(account_number, sort_code)
+
     weightings = _get_weightings(sort_code)
     check_count = len(weightings)
     if not weightings:
