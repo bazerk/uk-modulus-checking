@@ -1,15 +1,35 @@
 import unittest
 # noinspection PyProtectedMember
-from ukmodulus import validate_number, _clean_input, _get_weightings, ModulusWeight, _run_check, _sc_subs
+from ukmodulus import (validate_number, _clean_input, _get_weightings,
+                       ModulusWeight, _run_check, _sc_subs,
+                       _normalize_account_number_and_code)
 
 
 class SimpleValidationTests(unittest.TestCase):
     def test_clean_input(self):
         self.assertRaises(ValueError, _clean_input, 'invalid')
         self.assertRaises(ValueError, _clean_input, '12a3456')
-        self.assertRaises(ValueError, _clean_input, '1234567', 6)
+        self.assertRaises(ValueError, _clean_input, '1234567', [6])
         self.assertEqual(_clean_input('12-34-56'), '123456')
         self.assertEqual(_clean_input('12 34 56'), '123456')
+
+    def test_normalization(self):
+        test_table = [
+            # account_number, sortcode, expected_account_number, expected_sort_code
+            ('0123456789', '090050', '23456789', '090050'),
+            ('0123456789', '080050', '01234567', '080050'),
+            ('123456789', '080050', '23456789', '080051'),
+            ('1234567', '080050', '01234567', '080050'),
+            ('123456', '080050', '00123456', '080050'),
+        ]
+
+        for test_entry in test_table:
+            account_number, sortcode, expected_account_number, expected_sort_code = test_entry
+
+            res_acc, res_sort = _normalize_account_number_and_code(account_number, sortcode)
+
+            self.assertEqual(res_acc, expected_account_number)
+            self.assertEqual(res_sort, expected_sort_code)
 
 
 class RunAlgorithmChecks(unittest.TestCase):
