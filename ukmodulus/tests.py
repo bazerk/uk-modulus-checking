@@ -1,4 +1,6 @@
+import sys
 import unittest
+import xmlrunner
 # noinspection PyProtectedMember
 from ukmodulus import (validate_number, _clean_input, _get_weightings,
                        ModulusWeight, _run_check, _sc_subs,
@@ -239,4 +241,7 @@ class ValacdosTests(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    unittest.main()
+    with open('results.xml', 'wb') as output:
+        unittest.main(
+            testRunner=xmlrunner.XMLTestRunner(output=output),
+            failfast=False, buffer=False, catchbreak=False)

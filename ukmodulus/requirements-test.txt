@@ -1,0 +1,6 @@
+--pre
+
+coverage==4.5.1
+six==1.11.0
+unittest-xml-reporting==2.2.0
+
