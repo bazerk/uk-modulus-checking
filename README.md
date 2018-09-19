@@ -19,3 +19,15 @@ Limitations
 -----------
 
 Doesn't currently deal with account numbers which are not 8 digits long. (i.e. doesn't implement the exceptions listed in 4.2 of the VocaLink spec).
+
+Development
+-----------
+
+### Setup
+
+1. `python setup.py build && python setup.py install`
+
+### Testing
+
+1. `pip install -r requirements-test.txt`
+1. `python ukmodulus/tests.py`
