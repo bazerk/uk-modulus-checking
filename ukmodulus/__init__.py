@@ -102,7 +102,16 @@ def _normalize_account_number_and_code(account_number, sort_code):
             return account_number[:8], sort_code
         return account_number[-8:], sort_code
     elif ln == 9:
-        return account_number[-8:], sort_code[:-1] + account_number[0]
+        def is_santander_sort_code():
+            return (sort_code >= "090000" and sort_code <= "091900") or \
+		(sort_code >= "720000" and sort_code <= "729999") or \
+		(sort_code >= "890000" and sort_code <= "892999") or \
+		sort_code == "165710"
+
+        if is_santander_sort_code():
+            return account_number[-8:], sort_code[:-1] + account_number[0]
+        else:
+            return account_number[-8:], sort_code
     else:
         return '{:08}'.format(int(account_number)), sort_code
 
