@@ -18,7 +18,14 @@ class SimpleValidationTests(unittest.TestCase):
             # account_number, sortcode, expected_account_number, expected_sort_code
             ('0123456789', '090050', '23456789', '090050'),
             ('0123456789', '080050', '01234567', '080050'),
-            ('123456789', '080050', '23456789', '080051'),
+            #
+            # 9-digit, Santander case.
+            #
+            ('123456789', '090050', '23456789', '090051'),
+            #
+            # 9-digit, non-Santander (Coventry Building Society) case.
+            #
+            ('123456789', '406301', '23456789', '406301'),
             ('1234567', '080050', '01234567', '080050'),
             ('123456', '080050', '00123456', '080050'),
         ]
